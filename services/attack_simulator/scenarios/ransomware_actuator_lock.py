@@ -4,7 +4,7 @@ Simulates an extortion threat vector where malware locks digital valves in open/
 overwrites configuration memory with encrypted blobs, and issues extortion demands via MQTT topic messages.
 """
 
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 from pydantic import BaseModel, Field
 import time
 
