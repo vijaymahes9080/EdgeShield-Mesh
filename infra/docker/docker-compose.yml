@@ -1,0 +1,107 @@
+version: '3.8'
+
+services:
+  # 1. Mosquitto MQTT Broker
+  mosquitto:
+    image: eclipse-mosquitto:2.0
+    container_name: edgeshield-mosquitto
+    restart: unless-stopped
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+      - ./mosquitto.acl:/mosquitto/config/mosquitto.acl:ro
+      - mosquitto_data:/mosquitto/data
+      - mosquitto_log:/mosquitto/log
+
+  # 2. PostgreSQL Storage
+  postgres:
+    image: postgres:16-alpine
+    container_name: edgeshield-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: edgeshield
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-edgeshield_secure_pass_2026}
+      POSTGRES_DB: edgeshield
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # 3. Qdrant Vector Database
+  qdrant:
+    image: qdrant/qdrant:v1.8.4
+    container_name: edgeshield-qdrant
+    restart: unless-stopped
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant_storage:/qdrant/storage
+
+  # 4. Ollama Local LLM
+  ollama:
+    image: ollama/ollama:latest
+    container_name: edgeshield-ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_models:/root/.ollama
+
+  # 5. EdgeShield Core API Backend
+  api:
+    build:
+      context: ../../
+      dockerfile: infra/docker/Dockerfile.api
+    container_name: edgeshield-api
+    restart: unless-stopped
+    depends_on:
+      - mosquitto
+      - postgres
+      - qdrant
+    environment:
+      DATABASE_URL: postgresql+asyncpg://edgeshield:${DB_PASSWORD:-edgeshield_secure_pass_2026}@postgres:5432/edgeshield
+      MQTT_BROKER_HOST: mosquitto
+      MQTT_BROKER_PORT: 1883
+      QDRANT_HOST: qdrant
+      QDRANT_PORT: 6333
+      OLLAMA_HOST: http://ollama:11434
+      SECRET_KEY: ${JWT_SECRET:-edgeshield_super_secure_jwt_prod_key_change_in_prod}
+    ports:
+      - "8000:8000"
+
+  # 6. EdgeShield Web Dashboard
+  web:
+    build:
+      context: ../../
+      dockerfile: infra/docker/Dockerfile.web
+    container_name: edgeshield-web
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "5173:80"
+
+  # 7. n8n Automation Engine
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:latest
+    container_name: edgeshield-n8n
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=operator
+      - N8N_BASIC_AUTH_PASSWORD=${N8N_PASSWORD:-operator123!}
+      - WEBHOOK_URL=http://localhost:5678/
+    volumes:
+      - n8n_data:/home/node/.n8n
+
+volumes:
+  mosquitto_data:
+  mosquitto_log:
+  postgres_data:
+  qdrant_storage:
+  ollama_models:
+  n8n_data:

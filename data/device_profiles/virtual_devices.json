@@ -1,0 +1,148 @@
+[
+  {
+    "id": "soil-sensor-01",
+    "name": "Soil Moisture Alpha",
+    "device_type": "soil_sensor",
+    "zone": "zone_a_north_field",
+    "owner": "Agritech Cooperative",
+    "status": "active",
+    "firmware_version": "1.2.0",
+    "hardware_rev": "revB-ESP32",
+    "ip_address": "192.168.10.101",
+    "mac_address": "00:1B:44:11:3A:B1",
+    "telemetry_interval_sec": 10,
+    "expected_topics": [
+      "edgeshield/soil-sensor-01/telemetry",
+      "edgeshield/soil-sensor-01/status"
+    ],
+    "allowed_actuators": [],
+    "is_virtual": true,
+    "metadata": {
+      "crop": "Corn / Maize",
+      "depth_cm": 20,
+      "sensor_chip": "Capacitive-V2"
+    },
+    "metric_bounds": {
+      "soil_moisture_pct": { "min": 0.0, "max": 100.0, "unit": "%" },
+      "soil_temp_c": { "min": -10.0, "max": 50.0, "unit": "°C" },
+      "battery_level": { "min": 0.0, "max": 100.0, "unit": "%" },
+      "signal_rssi": { "min": -120, "max": -20, "unit": "dBm" }
+    }
+  },
+  {
+    "id": "weather-station-01",
+    "name": "Weather Tower Beta",
+    "device_type": "weather_station",
+    "zone": "zone_b_weather_tower",
+    "owner": "Agritech Cooperative",
+    "status": "active",
+    "firmware_version": "2.0.1",
+    "hardware_rev": "revC-STM32",
+    "ip_address": "192.168.10.102",
+    "mac_address": "00:1B:44:11:3A:B2",
+    "telemetry_interval_sec": 15,
+    "expected_topics": [
+      "edgeshield/weather-station-01/telemetry",
+      "edgeshield/weather-station-01/status"
+    ],
+    "allowed_actuators": [],
+    "is_virtual": true,
+    "metadata": {
+      "elevation_m": 145,
+      "anemometer_type": "Ultrasonic"
+    },
+    "metric_bounds": {
+      "ambient_temp_c": { "min": -30.0, "max": 60.0, "unit": "°C" },
+      "humidity_pct": { "min": 0.0, "max": 100.0, "unit": "%" },
+      "solar_irradiance_w_m2": { "min": 0.0, "max": 1500.0, "unit": "W/m²" },
+      "wind_speed_mps": { "min": 0.0, "max": 60.0, "unit": "m/s" },
+      "rainfall_mm": { "min": 0.0, "max": 300.0, "unit": "mm" }
+    }
+  },
+  {
+    "id": "valve-controller-01",
+    "name": "Irrigation Valve Gamma",
+    "device_type": "valve_controller",
+    "zone": "zone_a_irrigation",
+    "owner": "Agritech Cooperative",
+    "status": "active",
+    "firmware_version": "1.1.0",
+    "hardware_rev": "revA-SolenoidDriver",
+    "ip_address": "192.168.10.103",
+    "mac_address": "00:1B:44:11:3A:B3",
+    "telemetry_interval_sec": 10,
+    "expected_topics": [
+      "edgeshield/valve-controller-01/telemetry",
+      "edgeshield/valve-controller-01/status",
+      "edgeshield/valve-controller-01/cmd/state"
+    ],
+    "allowed_actuators": ["solenoid_valve_1", "solenoid_valve_2"],
+    "is_virtual": true,
+    "metadata": {
+      "valve_type": "Latching-24V",
+      "pipe_diameter_inch": 2.0
+    },
+    "metric_bounds": {
+      "line_pressure_psi": { "min": 0.0, "max": 120.0, "unit": "PSI" },
+      "flow_rate_lpm": { "min": 0.0, "max": 500.0, "unit": "L/min" }
+    }
+  },
+  {
+    "id": "solar-pump-01",
+    "name": "Solar Pump Subsystem Delta",
+    "device_type": "power_subsystem",
+    "zone": "zone_c_solar_array",
+    "owner": "Agritech Cooperative",
+    "status": "active",
+    "firmware_version": "1.0.4",
+    "hardware_rev": "revD-MPPT",
+    "ip_address": "192.168.10.104",
+    "mac_address": "00:1B:44:11:3A:B4",
+    "telemetry_interval_sec": 12,
+    "expected_topics": [
+      "edgeshield/solar-pump-01/telemetry",
+      "edgeshield/solar-pump-01/status"
+    ],
+    "allowed_actuators": ["inverter_power_switch"],
+    "is_virtual": true,
+    "metadata": {
+      "mppt_controller": "Victron-Sim",
+      "pump_power_kw": 3.5
+    },
+    "metric_bounds": {
+      "pv_voltage_v": { "min": 0.0, "max": 150.0, "unit": "V" },
+      "pv_current_a": { "min": 0.0, "max": 35.0, "unit": "A" },
+      "pump_rpm": { "min": 0.0, "max": 4500.0, "unit": "RPM" },
+      "inverter_temp_c": { "min": -10.0, "max": 85.0, "unit": "°C" }
+    }
+  },
+  {
+    "id": "greenhouse-env-01",
+    "name": "Greenhouse Monitor Epsilon",
+    "device_type": "greenhouse_monitor",
+    "zone": "zone_d_greenhouse",
+    "owner": "Agritech Cooperative",
+    "status": "warning",
+    "firmware_version": "0.9.1",
+    "hardware_rev": "rev1-LegacyESP8266",
+    "ip_address": "192.168.10.105",
+    "mac_address": "00:1B:44:11:3A:B5",
+    "telemetry_interval_sec": 8,
+    "expected_topics": [
+      "edgeshield/greenhouse-env-01/telemetry",
+      "edgeshield/greenhouse-env-01/status"
+    ],
+    "allowed_actuators": [],
+    "is_virtual": true,
+    "metadata": {
+      "greenhouse_id": "GH-04-Tomatoes",
+      "vulnerabilities": ["CVE-2024-IoT-9912", "Hardcoded-MQTT-Key-Risk"]
+    },
+    "metric_bounds": {
+      "co2_ppm": { "min": 300.0, "max": 5000.0, "unit": "PPM" },
+      "humidity_pct": { "min": 0.0, "max": 100.0, "unit": "%" },
+      "temp_c": { "min": 0.0, "max": 60.0, "unit": "°C" },
+      "light_lux": { "min": 0.0, "max": 120000.0, "unit": "lux" }
+    }
+  }
+]

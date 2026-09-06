@@ -3,3 +3,21 @@ composer.lock
 .env
 .DS_Store
 Thumbs.db
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+*.db
+*.sqlite3
+
+# Node / Web
+node_modules/
+dist/
+dist-ssr/
+*.local
+.npm

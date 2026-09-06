@@ -1,0 +1,26 @@
+# EdgeShield Mesh - Mosquitto ACL Rules
+
+# Topic ACL for Soil Moisture Sensors
+pattern readwrite edgeshield/soil-sensor-01/telemetry
+pattern readwrite edgeshield/soil-sensor-01/status
+
+# Topic ACL for Weather Station
+pattern readwrite edgeshield/weather-station-01/telemetry
+pattern readwrite edgeshield/weather-station-01/status
+
+# Topic ACL for Valve Controller
+pattern readwrite edgeshield/valve-controller-01/telemetry
+pattern readwrite edgeshield/valve-controller-01/status
+pattern read edgeshield/valve-controller-01/cmd/#
+
+# Topic ACL for Solar Pump
+pattern readwrite edgeshield/solar-pump-01/telemetry
+pattern readwrite edgeshield/solar-pump-01/status
+
+# Topic ACL for Greenhouse Monitor
+pattern readwrite edgeshield/greenhouse-env-01/telemetry
+pattern readwrite edgeshield/greenhouse-env-01/status
+
+# Backend Ingestion Gateway access to all telemetry
+pattern read edgeshield/+/telemetry
+pattern read edgeshield/+/status

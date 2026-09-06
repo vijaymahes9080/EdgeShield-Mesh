@@ -1,0 +1,102 @@
+{
+  "name": "EdgeShield Mesh - Incident Notification Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "edgeshield-incident-alert",
+        "options": {}
+      },
+      "name": "Webhook: High Severity Incident Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [100, 300],
+      "webhookId": "edgeshield-incident-webhook"
+    },
+    {
+      "parameters": {
+        "functionCode": "// Extract incident metadata safely and sanitize\nconst incident = items[0].json.body || items[0].json;\n\nreturn [{\n  json: {\n    incident_id: incident.incident_id || incident.id,\n    title: incident.title || 'IoT Security Anomaly Detected',\n    severity: (incident.severity || 'HIGH').toUpperCase(),\n    device_id: incident.device_id || 'unknown',\n    confidence: incident.confidence ? `${(incident.confidence * 100).toFixed(0)}%` : '90%',\n    observed_facts: incident.observed_facts || [],\n    citations_count: (incident.citations || []).length,\n    requires_human_approval: true,\n    remediation_notice: 'No disruptive action will execute without operator approval in the EdgeShield Console.',\n    timestamp: new Date().toISOString()\n  }\n}];"
+      },
+      "name": "Format Incident Alert Payload",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [350, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.severity}}",
+              "value2": "CRITICAL"
+            }
+          ]
+        }
+      },
+      "name": "Check If Critical Severity",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [600, 300]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Build operator dispatch notification\nconst alert = items[0].json;\nconsole.log(`[EDGESHIELD DISPATCH] CRITICAL INCIDENT ${alert.incident_id} on ${alert.device_id}: ${alert.title}`);\n\nreturn [{\n  json: {\n    status: 'dispatched',\n    channel: 'operator_push_notification',\n    alert: alert\n  }\n}];"
+      },
+      "name": "Log and Dispatch Critical Alert",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [850, 200]
+    },
+    {
+      "parameters": {
+        "functionCode": "// Routine notification log\nconst alert = items[0].json;\nconsole.log(`[EDGESHIELD DISPATCH] HIGH INCIDENT ${alert.incident_id} on ${alert.device_id}`);\nreturn [{ json: { status: 'logged', alert: alert } }];"
+      },
+      "name": "Log Standard Alert",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [850, 400]
+    }
+  ],
+  "connections": {
+    "Webhook: High Severity Incident Trigger": {
+      "main": [
+        [
+          {
+            "node": "Format Incident Alert Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Incident Alert Payload": {
+      "main": [
+        [
+          {
+            "node": "Check If Critical Severity",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check If Critical Severity": {
+      "main": [
+        [
+          {
+            "node": "Log and Dispatch Critical Alert",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Standard Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "edgeshield-mesh"
+version = "1.0.0"
+description = "Production-grade agentic cybersecurity platform for small and rural IoT deployments."
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+    { name = "Vijay Mahes", email = "Vijaypradhap2004@gmail.com" }
+]
+license = { text = "MIT" }
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+pythonpath = [".", "packages/shared", "services", "apps"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["packages*", "services*", "apps*"]
