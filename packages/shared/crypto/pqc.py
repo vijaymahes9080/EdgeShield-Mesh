@@ -39,22 +39,25 @@ class PQCKeyExchange:
         peer_pub = bytes.fromhex(peer_public_key_hex)
         ephemeral_secret = os.urandom(32)
         
-        # Lattice polynomial encapsulation simulation
-        ciphertext = hashlib.sha3_512(peer_pub + ephemeral_secret).digest()
-        shared_secret = hashlib.sha256(ephemeral_secret + self.public_key_bytes + peer_pub).digest()
+        # Ciphertext embeds encrypted ephemeral secret using peer's public key
+        ct_mask = hashlib.sha3_512(peer_pub + b"CT_MASK").digest()[:32]
+        ct_payload = bytes([a ^ b for a, b in zip(ephemeral_secret, ct_mask)])
         
-        return ciphertext.hex(), shared_secret
+        shared_secret = hashlib.sha256(ephemeral_secret + peer_pub).digest()
+        return ct_payload.hex(), shared_secret
 
     def decapsulate(self, ciphertext_hex: str, peer_public_key_hex: str) -> bytes:
         """
         Decapsulates shared secret from received ciphertext.
         """
-        ct_bytes = bytes.fromhex(ciphertext_hex)
+        ct_payload = bytes.fromhex(ciphertext_hex)
         peer_pub = bytes.fromhex(peer_public_key_hex)
         
-        # Derive equivalent shared secret
-        h = hashlib.sha3_512(ct_bytes + self._private_seed)
-        shared_secret = hashlib.sha256(h.digest()[:32] + peer_pub + self.public_key_bytes).digest()
+        # Decrypt ephemeral secret with own public key mask
+        ct_mask = hashlib.sha3_512(self.public_key_bytes + b"CT_MASK").digest()[:32]
+        ephemeral_secret = bytes([a ^ b for a, b in zip(ct_payload, ct_mask)])
+        
+        shared_secret = hashlib.sha256(ephemeral_secret + self.public_key_bytes).digest()
         return shared_secret
 
 

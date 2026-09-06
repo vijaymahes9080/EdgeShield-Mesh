@@ -24,8 +24,13 @@ class DoubleRatchetSession:
 
     def __init__(self, shared_root_key: bytes, is_initiator: bool = True):
         self.root_key = shared_root_key
-        self.send_chain_key = hashlib.sha256(shared_root_key + b"SEND").digest()
-        self.recv_chain_key = hashlib.sha256(shared_root_key + b"RECV").digest() if not is_initiator else hashlib.sha256(shared_root_key + b"SEND").digest()
+        if is_initiator:
+            self.send_chain_key = hashlib.sha256(shared_root_key + b"A_TO_B").digest()
+            self.recv_chain_key = hashlib.sha256(shared_root_key + b"B_TO_A").digest()
+        else:
+            self.send_chain_key = hashlib.sha256(shared_root_key + b"B_TO_A").digest()
+            self.recv_chain_key = hashlib.sha256(shared_root_key + b"A_TO_B").digest()
+        
         self.send_seq = 0
         self.recv_seq = 0
         self.key_id = os.urandom(8).hex()
