@@ -1,0 +1,14 @@
+{
+    "name": "vijaymahes9080/edgeshield-mesh",
+    "description": "EdgeShield-Mesh project",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Vijay Mahes",
+            "email": "Vijaypradhap2004@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {}
+}
