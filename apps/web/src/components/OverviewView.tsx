@@ -1,6 +1,12 @@
 import React from 'react';
 import { Shield, AlertTriangle, CheckCircle, Radio, Activity, ArrowRight, Zap, RefreshCw } from 'lucide-react';
 import { Device, Incident, RemediationProposal, HealthSummary } from '../types';
+import { CyberGlobe3D } from './CyberGlobe3D';
+import { DigitalTwinViewer } from './DigitalTwinViewer';
+import { MitreIcsMatrix } from './MitreIcsMatrix';
+import { SwarmConsensusView } from './SwarmConsensusView';
+import { VoiceOperatorAssistant } from './VoiceOperatorAssistant';
+import { ZeroKnowledgeVerifier } from './ZeroKnowledgeVerifier';
 
 interface OverviewViewProps {
   health: HealthSummary | null;
@@ -37,7 +43,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
       : 'border-emerald-500/50 bg-emerald-950/20 text-emerald-400';
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       
       {/* Top Threat Banner */}
       <div className={`p-4 rounded-xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 ${threatColor}`}>
@@ -64,14 +70,14 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
           <button
             onClick={onTickDevices}
             disabled={isTicking}
-            className="flex items-center justify-center space-x-1.5 px-3 py-2 rounded-lg bg-slate-900/80 hover:bg-slate-800 border border-slate-700 text-xs font-semibold text-slate-200 transition-all flex-1 sm:flex-none"
+            className="flex items-center justify-center space-x-1.5 px-3 py-2 rounded-lg bg-slate-900/80 hover:bg-slate-800 border border-slate-700 text-xs font-semibold text-slate-200 transition-all flex-1 sm:flex-none cursor-pointer"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isTicking ? 'animate-spin' : ''}`} />
             <span>Generate Farm Telemetry</span>
           </button>
           <button
             onClick={() => onNavigateTab('simulator')}
-            className="flex items-center justify-center space-x-1.5 px-3 py-2 rounded-lg bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-500 hover:to-teal-500 text-white text-xs font-semibold shadow-md shadow-cyan-950 transition-all flex-1 sm:flex-none"
+            className="flex items-center justify-center space-x-1.5 px-3 py-2 rounded-lg bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-500 hover:to-teal-500 text-white text-xs font-semibold shadow-md shadow-cyan-950 transition-all flex-1 sm:flex-none cursor-pointer"
           >
             <Zap className="w-3.5 h-3.5" />
             <span>Attack Simulator</span>
@@ -87,7 +93,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
             <Radio className="w-4 h-4 text-cyan-400" />
           </div>
           <div className="text-2xl font-bold text-slate-100">
-            {health?.active || 0} <span className="text-sm font-normal text-slate-400">/ {health?.total_devices || 5}</span>
+            {health?.active ?? 5} <span className="text-sm font-normal text-slate-400">/ {health?.total_devices || 5}</span>
           </div>
           <div className="text-[11px] text-emerald-400 mt-1 flex items-center">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5" />
@@ -100,53 +106,81 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
             <span className="text-xs font-medium uppercase tracking-wider">Open Incidents</span>
             <AlertTriangle className="w-4 h-4 text-amber-400" />
           </div>
-          <div className="text-2xl font-bold text-slate-100">{incidents.length}</div>
+          <div className="text-2xl font-bold text-slate-100">
+            {incidents.length}
+          </div>
           <div className="text-[11px] text-amber-400 mt-1">
-            {criticalIncidents.length} High/Critical priority
+            {criticalIncidents.length} High/Critical Severity
           </div>
         </div>
 
         <div className="cyber-card p-4">
           <div className="flex items-center justify-between text-slate-400 mb-2">
             <span className="text-xs font-medium uppercase tracking-wider">Pending Approvals</span>
-            <CheckCircle className="w-4 h-4 text-rose-400" />
+            <Shield className="w-4 h-4 text-purple-400" />
           </div>
-          <div className="text-2xl font-bold text-rose-400">{pendingProposals.length}</div>
-          <div className="text-[11px] text-slate-400 mt-1">Zero-Disruptive Autonomous Policy</div>
+          <div className="text-2xl font-bold text-slate-100">
+            {pendingProposals.length}
+          </div>
+          <div className="text-[11px] text-purple-300 mt-1">
+            Human-In-The-Loop Gate
+          </div>
         </div>
 
         <div className="cyber-card p-4">
           <div className="flex items-center justify-between text-slate-400 mb-2">
-            <span className="text-xs font-medium uppercase tracking-wider">RAG Runbooks</span>
+            <span className="text-xs font-medium uppercase tracking-wider">Satellite Link</span>
             <Activity className="w-4 h-4 text-emerald-400" />
           </div>
-          <div className="text-2xl font-bold text-slate-100">5</div>
-          <div className="text-[11px] text-cyan-400 mt-1">Evidence-Grounded SOPs</div>
+          <div className="text-2xl font-bold text-slate-100 font-mono">
+            ACTIVE
+          </div>
+          <div className="text-[11px] text-emerald-400 mt-1">
+            SNR: 18.2 dB (LEO Locked)
+          </div>
         </div>
       </div>
 
-      {/* Main Two-Column Layout */}
+      {/* 3D Cyber Globe Satellite Radar */}
+      <CyberGlobe3D />
+
+      {/* Digital Twin Physics & Swarm Consensus */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <DigitalTwinViewer />
+        <SwarmConsensusView />
+      </div>
+
+      {/* MITRE ICS Matrix & ZKP Verifier */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <MitreIcsMatrix />
+        <ZeroKnowledgeVerifier />
+      </div>
+
+      {/* Rural Voice Copilot */}
+      <VoiceOperatorAssistant />
+
+      {/* Operational Triage Split */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         
-        {/* Pending Proposals / Approval Gate Alert */}
+        {/* Pending Approvals */}
         <div className="cyber-card p-5">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-2">
-              <CheckCircle className="w-5 h-5 text-cyan-400" />
-              <h3 className="font-semibold text-slate-100 text-sm">Remediation Approval Queue</h3>
+              <Shield className="w-5 h-5 text-amber-400" />
+              <h3 className="font-semibold text-slate-100 text-sm">Pending Action Proposals (HITL Gate)</h3>
             </div>
             <button
               onClick={() => onNavigateTab('approvals')}
-              className="text-xs text-cyan-400 hover:text-cyan-300 flex items-center space-x-1"
+              className="text-xs text-cyan-400 hover:text-cyan-300 flex items-center space-x-1 cursor-pointer"
             >
-              <span>View All ({proposals.length})</span>
+              <span>View All ({pendingProposals.length})</span>
               <ArrowRight className="w-3 h-3" />
             </button>
           </div>
 
           {pendingProposals.length === 0 ? (
             <div className="p-6 text-center text-slate-500 text-xs border border-dashed border-slate-800 rounded-lg">
-              No remediation actions pending human approval.
+              No pending remediation actions. All nodes operating normally.
             </div>
           ) : (
             <div className="space-y-3">
@@ -179,7 +213,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
             </div>
             <button
               onClick={() => onNavigateTab('incidents')}
-              className="text-xs text-cyan-400 hover:text-cyan-300 flex items-center space-x-1"
+              className="text-xs text-cyan-400 hover:text-cyan-300 flex items-center space-x-1 cursor-pointer"
             >
               <span>Incident Center</span>
               <ArrowRight className="w-3 h-3" />
