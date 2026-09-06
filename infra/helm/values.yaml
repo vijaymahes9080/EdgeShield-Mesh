@@ -1,0 +1,48 @@
+# EdgeShield Mesh - Production Multi-Region Helm Chart Configuration
+global:
+  environment: production
+  imageRegistry: ghcr.io/vijaymahes9080/edgeshield-mesh
+  tag: latest
+
+gateway:
+  replicaCount: 3
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  env:
+    EDGESHIELD_MAX_PAYLOAD_BYTES: 65536
+    EDGESHIELD_PQC_ENABLED: true
+    EDGESHIELD_SWARM_CONSENSUS_ENABLED: true
+
+detectionEngine:
+  replicaCount: 2
+  detectors:
+    neuromorphicSNN: true
+    isolationForest: true
+    acousticTamper: true
+    gpsTeleportation: true
+    quantumEntropy: true
+
+mcpServer:
+  enabled: true
+  port: 8000
+  strictSchemaValidation: true
+
+persistence:
+  database:
+    type: postgresql
+    host: edgeshield-db.internal
+    port: 5432
+  vectorStore:
+    type: qdrant
+    host: edgeshield-qdrant.internal
+    port: 6333
+
+securityContext:
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 10001
