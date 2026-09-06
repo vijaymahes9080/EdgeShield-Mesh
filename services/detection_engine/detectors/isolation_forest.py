@@ -52,19 +52,18 @@ class StreamingIsolationTree:
         val = point.get(self.split_feature, 0.0)
         if val < self.split_value and self.left is not None:
             return self.left.path_length(point, current_depth + 1)
-        elif self.right is not None:
+        elif val >= self.split_value and self.right is not None:
             return self.right.path_length(point, current_depth + 1)
-        return current_depth
+        return current_depth + 1.0
 
     @staticmethod
     def _c(n: int) -> float:
         if n <= 1:
-            return 0.0
+            return 1.0
         if n == 2:
             return 1.0
-        # Harmonic number approximation H(n-1) = ln(n-1) + 0.5772156649
         h = math.log(n - 1) + 0.5772156649
-        return 2.0 * h - (2.0 * (n - 1) / n)
+        return max(1.0, 2.0 * h - (2.0 * (n - 1) / n))
 
 
 class StreamingIsolationForestDetector:
@@ -72,7 +71,7 @@ class StreamingIsolationForestDetector:
     Forest of isolation trees trained on sliding window baseline telemetry.
     """
 
-    def __init__(self, num_trees: int = 15, max_samples: int = 64, anomaly_threshold: float = 0.65):
+    def __init__(self, num_trees: int = 15, max_samples: int = 64, anomaly_threshold: float = 0.55):
         self.num_trees = num_trees
         self.max_samples = max_samples
         self.anomaly_threshold = anomaly_threshold
@@ -84,8 +83,8 @@ class StreamingIsolationForestDetector:
         if len(self.buffer) > self.max_samples:
             self.buffer.pop(0)
 
-        # Retrain trees if buffer is full
-        if len(self.buffer) >= 16:
+        # Retrain trees if buffer has enough samples
+        if len(self.buffer) >= 10:
             self.trees = []
             for _ in range(self.num_trees):
                 sample_data = random.sample(self.buffer, min(len(self.buffer), 32))
@@ -98,8 +97,6 @@ class StreamingIsolationForestDetector:
             return 0.0
         avg_path = sum(t.path_length(vector) for t in self.trees) / len(self.trees)
         c_n = StreamingIsolationTree._c(len(self.buffer) if self.buffer else 32)
-        if c_n == 0:
-            return 0.0
         score = 2.0 ** (-avg_path / c_n)
         return score
 
