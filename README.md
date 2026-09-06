@@ -2,7 +2,12 @@
 
 > **Agentic Cybersecurity Platform for Small, Rural, and Satellite-Linked IoT Deployments**
 
+<p align="center">
+  <img src="docs/assets/hero_banner_light.jpg" alt="EdgeShield Mesh Hero Banner" width="100%" />
+</p>
+
 [![CI & Security Scanning](https://github.com/vijaymahes9080/EdgeShield-Mesh/actions/workflows/ci.yml/badge.svg)](https://github.com/vijaymahes9080/EdgeShield-Mesh/actions)
+[![Deploy to GitHub Pages](https://github.com/vijaymahes9080/EdgeShield-Mesh/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/vijaymahes9080/EdgeShield-Mesh/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-emerald.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11+-cyan.svg)](https://www.python.org/)
 [![React 18](https://img.shields.io/badge/React-18.2+-blue.svg)](https://react.dev/)
@@ -12,7 +17,15 @@
 
 ---
 
-## Mission & Problem Statement
+## 🌐 Live Web Demo & GitHub Pages Deployment
+
+- **Live Cyber Defense Dashboard**: [https://vijaymahes9080.github.io/EdgeShield-Mesh/](https://vijaymahes9080.github.io/EdgeShield-Mesh/)
+- **API Documentation**: `http://localhost:8000/docs`
+- **Prometheus Metrics**: `http://localhost:8000/metrics`
+
+---
+
+## 🎯 Mission & Problem Statement
 
 Rural farms, irrigation networks, community microgrids, and remote environmental sensor arrays frequently operate with weak security controls, outdated microcode, intermittent satellite backhauls, and no dedicated Security Operations Center (SOC) team.
 
@@ -32,7 +45,15 @@ Rural farms, irrigation networks, community microgrids, and remote environmental
 
 ---
 
-## Architectural Overview
+## 🖥️ Modern Light-Theme Dashboard & Visual Interface
+
+<p align="center">
+  <img src="docs/assets/dashboard_light.jpg" alt="EdgeShield Mesh Cyber Defense Dashboard in Light Theme" width="100%" />
+</p>
+
+---
+
+## 🏗️ Architectural Overview
 
 ```mermaid
 flowchart TD
@@ -113,7 +134,15 @@ flowchart TD
 
 ---
 
-## Non-Negotiable AI Safety Controls
+## ⚡ Digital Twin & Hydraulic Physics Engine
+
+<p align="center">
+  <img src="docs/assets/digital_twin_light.jpg" alt="Digital Twin Hydraulic & Electrical Simulation" width="100%" />
+</p>
+
+---
+
+## 🛡️ Non-Negotiable AI Safety Controls
 
 1. **Zero Disruptive Autonomous Actions**: The AI agent is strictly an **advisor**. Disruptive actions (e.g., valve trips, breaker cuts, node isolations) can **never** execute without explicit, authenticated human operator approval.
 2. **Untrusted Data Isolation**: Telemetry payloads, device metadata, topic names, and log streams are quarantined and never executed as prompt instructions.
@@ -125,7 +154,7 @@ flowchart TD
 
 ---
 
-## 60-Scenario Evaluation Benchmark Results
+## 📊 60-Scenario Evaluation Benchmark Results
 
 ```text
 ======================================================================
@@ -185,7 +214,7 @@ flowchart TD
 
 ---
 
-## Quick Start Guide
+## 🚀 Quick Start Guide
 
 ### 1. Install & Launch Backend
 
@@ -225,7 +254,7 @@ python tests/evaluation/benchmark_suite_60.py
 
 ---
 
-## Documentation Index
+## 📚 Documentation Index
 
 - [01. Quick Start Guide](docs/01_QUICKSTART.md)
 - [02. Architecture & Deep Technical Design](docs/02_ARCHITECTURE.md)
@@ -241,10 +270,11 @@ python tests/evaluation/benchmark_suite_60.py
 - [12. Contributing Guidelines](docs/12_CONTRIBUTING.md)
 - [13. Post-Quantum Cryptography & ZKP Whitepaper](docs/13_POST_QUANTUM_SECURITY.md)
 - [14. Swarm Consensus & Mesh Synchronization Spec](docs/14_SWARM_CONSENSUS_SPEC.md)
+- [15. LinkedIn Launch Announcement](linkedin.md)
 
 ---
 
-## Author & Developer
+## 👤 Author & Developer
 
 - **Lead Architect:** Vijay Mahes ([@vijaymahes9080](https://github.com/vijaymahes9080))
 - **Email:** `Vijaypradhap2004@gmail.com`
